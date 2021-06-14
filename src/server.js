@@ -2,8 +2,9 @@ import express from "express"
 import listEndpoints from "express-list-endpoints"
 import cors from "cors"
 import profilesRoutes from "./profiles/index.js"
+
 import { join } from "path"
-// import experiencesRoutes from "./experiences/index.js"
+import experienceRoutes from "../src/experience/index.js"
 import filesRoutes from "./files/index.js"
 import { getCurrentFolderPath } from "./lib/fs-tools.js"
 import {
@@ -13,6 +14,7 @@ import {
   catchAllErrorHandler,
 } from "./errorHandlers.js"
 import mongoose from "mongoose"
+
 
 const server = express()
 
@@ -37,11 +39,12 @@ const corsOptions = {
 
 // *********MIDDLEWARES*********
 // server.use(express.static(publicFolderPath))
-server.use(express.json())
+server.use(express.json()) //json acceptance
 server.use(cors(corsOptions))
 
 // ********ROUTES*********
 server.use("/profiles", profilesRoutes)
+server.use("/experiences", experienceRoutes)
 // server.use("/experiences", experiencesRoutes)
 
 // ********ERROR MIDDLEWARES**********
