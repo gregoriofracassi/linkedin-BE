@@ -2,6 +2,8 @@ import mongoose from "mongoose"
 import createError from "http-errors"
 
 const { Schema, model } = mongoose
+// const model = mongoose.model
+// const Schema = mongoose.Schema
 
 const ProfileSchema = new Schema({
   name: {

@@ -23,10 +23,7 @@ profileRouter.get("/", async (req, res, next) => {
     const query = q2m(req.query)
     const total = await ProfileModel.countDocuments(query.criteria)
 
-    const profiles = await ProfileModel.find(
-      query.criteria,
-      query.options.fields
-    )
+    const profiles = await ProfileModel.find({ name: "Dan" })
       .skip(query.options.skip)
       .limit(query.options.limit)
       .sort(query.options.sort)
@@ -40,21 +37,22 @@ profileRouter.get("/", async (req, res, next) => {
 
 profileRouter.get("/:id", async (req, res, next) => {
   try {
-    const author = await AuthorModel.findById(req.params.id)
-    if (author) {
-      res.send(author)
+    console.log("our request", req.query)
+    const profile = await ProfileModel.findById(req.params.id)
+    if (profile) {
+      res.send(profile)
     } else {
-      next(createError(404, `Author ${req.params.id} not found`))
+      next(createError(404, `Profile ${req.params.id} not found`))
     }
   } catch (error) {
     console.log(error)
-    next(error)
+    next(createError(500, "An error occurred while saving new author"))
   }
 })
 
 profileRouter.put("/:id", async (req, res, next) => {
   try {
-    const modifiedAuthor = await AuthorModel.findByIdAndUpdate(
+    const modifiedProfile = await ProfileModel.findByIdAndUpdate(
       req.params.id,
       req.body,
       {
@@ -62,28 +60,28 @@ profileRouter.put("/:id", async (req, res, next) => {
         new: true,
       }
     )
-    if (modifiedAuthor) {
-      res.send(modifiedAuthor)
+    if (modifiedProfile) {
+      res.send(modifiedProfile)
     } else {
       next(createError(404, `Author ${req.params.id} not found`))
     }
   } catch (error) {
     console.log(error)
-    next(error)
+    next(createError(500, "An error occurred while modifying an author"))
   }
 })
 
 profileRouter.delete("/:id", async (req, res, next) => {
   try {
-    const author = await AuthorModel.findByIdAndDelete(req.params.id)
-    if (author) {
-      res.send(author)
+    const profile = await ProfileModel.findByIdAndDelete(req.params.id)
+    if (profile) {
+      res.send(profile)
     } else {
       next(createError(404, `Author ${req.params.id} not found`))
     }
   } catch (error) {
     console.log(error)
-    next(error)
+    next(createError(500, "An error occurred while deleting an author"))
   }
 })
 
