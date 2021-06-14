@@ -1,6 +1,16 @@
 import express from 'express';
 import ExperienceModel from './schema.js';
-import q2m from 'query-to-mongo';
+import { v2 as cloudinary } from 'cloudinary';
+import { CloudinaryStorage } from 'multer-storage-cloudinary';
+//import q2m from 'query-to-mongo';
+import multer from 'multer';
+
+const cloudinaryStorage = new CloudinaryStorage({
+	cloudinary,
+	params: {
+		folder: 'Products-Images',
+	},
+});
 
 const experienceRoutes = express.Router(); //express constructor to create router
 
@@ -52,12 +62,33 @@ experienceRoutes.delete('/:id', async (req, res, next) => {
 		next(error);
 	}
 });
-experienceRoutes.get('/', async (req, res, next) => {
-	try {
-	} catch (error) {
-		next(error);
+
+experienceRoutes.post(
+	'/:id/picture',
+	multer({ storage: cloudinaryStorage }).single('expPicture'),
+	async (req, res, next) => {
+		try {
+			const experiencePicture = await ExperienceModel.findByIdAndUpdate(
+				req.params.id,
+				{ image: req.file.path },
+				{ runValidators: true, new: true }
+			);
+
+			if (experiencePicture) {
+				res.send(experiencePicture);
+			} else {
+				next(
+					createError(404, {
+						message: `experience ${req.params.id} not found`,
+					})
+				);
+			}
+		} catch (error) {
+			next(error);
+		}
 	}
-});
+);
+
 experienceRoutes.get('/', async (req, res, next) => {
 	try {
 	} catch (error) {
