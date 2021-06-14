@@ -1,9 +1,9 @@
 import express from "express"
 import listEndpoints from "express-list-endpoints"
 import cors from "cors"
-import authorsRoutes from "./authors/index.js"
+import profilesRoutes from "./profiles/index.js"
 import { join } from "path"
-import postsRoutes from "./blogPosts/index.js"
+// import experiencesRoutes from "./experiences/index.js"
 import filesRoutes from "./files/index.js"
 import { getCurrentFolderPath } from "./lib/fs-tools.js"
 import {
@@ -30,20 +30,19 @@ const corsOptions = {
   },
 }
 
-const publicFolderPath = join(
-  getCurrentFolderPath(import.meta.url),
-  "../public"
-)
+// const publicFolderPath = join(
+//   getCurrentFolderPath(import.meta.url),
+//   "../public"
+// )
 
 // *********MIDDLEWARES*********
-server.use(express.static(publicFolderPath))
+// server.use(express.static(publicFolderPath))
 server.use(express.json())
 server.use(cors(corsOptions))
 
 // ********ROUTES*********
-server.use("/authors", authorsRoutes)
-server.use("/posts", postsRoutes)
-server.use("/files", filesRoutes)
+server.use("/profiles", profilesRoutes)
+// server.use("/experiences", experiencesRoutes)
 
 // ********ERROR MIDDLEWARES**********
 server.use(badRequestErrorHandler)

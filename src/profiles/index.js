@@ -2,14 +2,14 @@ import express from "express"
 import q2m from "query-to-mongo"
 import createError from "http-errors"
 
-import AuthorModel from "./schema.js"
+import ProfileModel from "./schema.js"
 
-const authorsRouter = express.Router()
+const profileRouter = express.Router()
 
-authorsRouter.post("/", async (req, res, next) => {
+profileRouter.post("/", async (req, res, next) => {
   try {
-    const newAuthor = new AuthorModel(req.body)
-    const { _id } = await newAuthor.save()
+    const newProfile = new ProfileModel(req.body)
+    const { _id } = await newProfile.save()
 
     res.status(201).send(_id)
   } catch (error) {
@@ -18,24 +18,27 @@ authorsRouter.post("/", async (req, res, next) => {
   }
 })
 
-authorsRouter.get("/", async (req, res, next) => {
+profileRouter.get("/", async (req, res, next) => {
   try {
     const query = q2m(req.query)
-    const total = await AuthorModel.countDocuments(query.criteria)
+    const total = await ProfileModel.countDocuments(query.criteria)
 
-    const authors = await AuthorModel.find(query.criteria, query.options.fields)
+    const profiles = await ProfileModel.find(
+      query.criteria,
+      query.options.fields
+    )
       .skip(query.options.skip)
       .limit(query.options.limit)
       .sort(query.options.sort)
 
-    res.send({ links: query.links("/author", total), total, authors })
+    res.send({ links: query.links("/profile", total), total, profiles })
   } catch (error) {
     console.log(error)
     next(error)
   }
 })
 
-authorsRouter.get("/:id", async (req, res, next) => {
+profileRouter.get("/:id", async (req, res, next) => {
   try {
     const author = await AuthorModel.findById(req.params.id)
     if (author) {
@@ -49,7 +52,7 @@ authorsRouter.get("/:id", async (req, res, next) => {
   }
 })
 
-authorsRouter.put("/:id", async (req, res, next) => {
+profileRouter.put("/:id", async (req, res, next) => {
   try {
     const modifiedAuthor = await AuthorModel.findByIdAndUpdate(
       req.params.id,
@@ -70,7 +73,7 @@ authorsRouter.put("/:id", async (req, res, next) => {
   }
 })
 
-authorsRouter.delete("/:id", async (req, res, next) => {
+profileRouter.delete("/:id", async (req, res, next) => {
   try {
     const author = await AuthorModel.findByIdAndDelete(req.params.id)
     if (author) {
@@ -84,4 +87,4 @@ authorsRouter.delete("/:id", async (req, res, next) => {
   }
 })
 
-export default authorsRouter
+export default profileRouter
