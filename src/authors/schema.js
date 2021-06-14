@@ -8,13 +8,13 @@ const AuthorSchema = new Schema({
   surname: { type: String, required: true },
 })
 
-AuthorSchema.post("validate", function (error, doc, next) {
-  if (error) {
-    const err = createError(400, error)
-    next(err)
-  } else {
-    next()
-  }
-})
+// AuthorSchema.post("validate", function (error, doc, next) {
+//   if (error) {
+//     const err = createError(400, error)
+//     next(err)
+//   } else {
+//     next()
+//   }
+// })
 
 export default model("Author", AuthorSchema)
