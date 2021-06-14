@@ -1,6 +1,6 @@
-import mongoose from "mongoose"
+import mongoose from 'mongoose';
 
-const { Schema, model } = mongoose
+const { Schema, model } = mongoose;
 
 /*
  {
@@ -18,43 +18,41 @@ const { Schema, model } = mongoose
     }
 */
 const ExperienceSchema = new Schema(
-  {
-    role: {
-      type:String,
-      required: true
-    },
-    company: {
-      type: String,
-      required: true
-    },
-    startDate:{
-      type: Date,
-      required: true
-    },
-    endDate:{
-      type: Date,
-      required: true
-    },
-    description:{
-      type: String
-    },
-    area:{
-      type: String,
-      required: true
-    },
-    username: {
-      type: String,
-      required: true
-    },
-    image:{
-      type: String,
-      default: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fyt3.ggpht.com%2F-MlnvEdpKY2w%2FAAAAAAAAAAI%2FAAAAAAAAAAA%2FtOyTWDyUvgQ%2Fs900-c-k-no-mo-rj-c0xffffff%2Fphoto.jpg&f=1&nofb=1"
-    }
+	{
+		role: {
+			type: String,
+			required: true,
+		},
+		company: {
+			type: String,
+			required: true,
+		},
+		startDate: {
+			type: Date,
+			required: true,
+		},
+		endDate: {
+			type: Date,
+			required: true,
+		},
+		description: {
+			type: String,
+		},
+		area: {
+			type: String,
+			required: true,
+		},
+		username: {
+			type: String,
+			required: true,
+		},
+		image: {
+			type: String,
+			default:
+				'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fyt3.ggpht.com%2F-MlnvEdpKY2w%2FAAAAAAAAAAI%2FAAAAAAAAAAA%2FtOyTWDyUvgQ%2Fs900-c-k-no-mo-rj-c0xffffff%2Fphoto.jpg&f=1&nofb=1',
+		},
+	},
+	{ timestamps: true }
+);
 
-
-
-  },{timestamps:true}
-  
-)
-
-export default model ("Experience", ExperienceSchema)
+export default model('Experience', ExperienceSchema);
