@@ -5,6 +5,9 @@ import multer from "multer"
 import { v2 as cloudinary } from "cloudinary"
 import { CloudinaryStorage } from "multer-storage-cloudinary"
 import ProfileModel from "./schema.js"
+import ExperienceModel from "../experience/schema.js"
+import { pipeline } from "stream"
+import { generatePDFStream } from "../lib/pdf.js"
 
 const profileRouter = express.Router()
 
@@ -119,5 +122,18 @@ profileRouter.post(
     }
   }
 )
+
+profileRouter.get("/:id/pdfDownload", async (req, res, next) => {
+  try {
+    const profile = await ProfileModel.findById(req.params.id)
+    const experiences = await ExperienceModel.find({})
+    const source = generatePDFStream(profile, experiences)
+    const destination = res
+    res.setHeader("Content-Disposition", "attachment; filename=export.pdf")
+    pipeline(source, destination, (err) => next(err))
+  } catch (error) {
+    next(error)
+  }
+})
 
 export default profileRouter
