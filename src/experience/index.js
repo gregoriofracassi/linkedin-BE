@@ -3,6 +3,8 @@ import ExperienceModel from './schema.js';
 import { v2 as cloudinary } from 'cloudinary';
 import { CloudinaryStorage } from 'multer-storage-cloudinary';
 //import q2m from 'query-to-mongo';
+import { Transform } from 'json2csv';
+import { pipeline } from 'stream';
 import multer from 'multer';
 
 const cloudinaryStorage = new CloudinaryStorage({
@@ -90,11 +92,36 @@ experienceRoutes.post(
 	}
 );
 
-experienceRoutes.get('/', async (req, res, next) => {
-	try {
-	} catch (error) {
-		next(error);
+experienceRoutes.get(
+	'/:profileId/username/experiences/csv',
+	async (req, res, next) => {
+		try {
+			const fields = [
+				'role',
+				'company',
+				'startDate',
+				'endDate',
+				'description',
+				'area',
+				'username',
+				'createdAt',
+				'updatedAt',
+				'image',
+			];
+			const opts = { fields };
+			const json2csv = new Transform(opts);
+			res.setHeader('Content-Disposition', `attachement; filenam=export.csv`);
+
+			const fileStream = getAuthorsReadStream();
+			pipeline(fileStream, json2csv, res, (err) => {
+				if (err) {
+					next(err);
+				}
+			});
+		} catch (error) {
+			next(error);
+		}
 	}
-});
+);
 
 export default experienceRoutes;
