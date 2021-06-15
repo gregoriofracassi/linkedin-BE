@@ -2,8 +2,8 @@ import express from 'express';
 import ExperienceModel from './schema.js';
 import { v2 as cloudinary } from 'cloudinary';
 import { CloudinaryStorage } from 'multer-storage-cloudinary';
-//import q2m from 'query-to-mongo';
-import { Transform } from 'json2csv';
+
+import { parse } from 'json2csv';
 import { pipeline } from 'stream';
 import multer from 'multer';
 
@@ -92,36 +92,28 @@ experienceRoutes.post(
 	}
 );
 
-experienceRoutes.get(
-	'/:profileId/username/experiences/csv',
-	async (req, res, next) => {
-		try {
-			const fields = [
-				'role',
-				'company',
-				'startDate',
-				'endDate',
-				'description',
-				'area',
-				'username',
-				'createdAt',
-				'updatedAt',
-				'image',
-			];
-			const opts = { fields };
-			const json2csv = new Transform(opts);
-			res.setHeader('Content-Disposition', `attachement; filenam=export.csv`);
+experienceRoutes.get('/:username/experiences/CSV', async (req, res, next) => {
+	try {
+		const allExperiences = await ExperienceModel.find();
 
-			const fileStream = getAuthorsReadStream();
-			pipeline(fileStream, json2csv, res, (err) => {
-				if (err) {
-					next(err);
-				}
-			});
-		} catch (error) {
-			next(error);
-		}
+		const fields = [
+			'_id',
+			'role',
+			'company',
+			'startDate',
+			'endDate',
+			'description',
+			'area',
+		];
+		const options = { fields };
+		const csv = parse(allExperiences, options);
+		console.log(csv);
+		res.setHeader('Content-Disposition', 'attachment; filename = export.csv');
+		res.send(csv);
+	} catch (error) {
+		console.log(error);
+		next(error);
 	}
-);
+});
 
 export default experienceRoutes;
