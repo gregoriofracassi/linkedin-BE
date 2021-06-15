@@ -19,6 +19,7 @@ const experienceRoutes = express.Router(); //express constructor to create route
 experienceRoutes.get('/', async (req, res, next) => {
 	try {
 		const experiences = await ExperienceModel.find({}).populate('profile');
+		console.log(experiences);
 		res.status(200).send(experiences);
 	} catch (error) {
 		next(error);
