@@ -1,7 +1,9 @@
 import express from "express"
 import q2m from "query-to-mongo"
 import createError from "http-errors"
-
+import multer from "multer"
+import { v2 as cloudinary } from "cloudinary"
+import { CloudinaryStorage } from "multer-storage-cloudinary"
 import ProfileModel from "./schema.js"
 
 const profileRouter = express.Router()
@@ -23,7 +25,10 @@ profileRouter.get("/", async (req, res, next) => {
     const query = q2m(req.query)
     const total = await ProfileModel.countDocuments(query.criteria)
 
-    const profiles = await ProfileModel.find({ name: "Dan" })
+    const profiles = await ProfileModel.find(
+      query.criteria,
+      query.options.fields
+    )
       .skip(query.options.skip)
       .limit(query.options.limit)
       .sort(query.options.sort)
@@ -31,7 +36,7 @@ profileRouter.get("/", async (req, res, next) => {
     res.send({ links: query.links("/profile", total), total, profiles })
   } catch (error) {
     console.log(error)
-    next(error)
+    next(createError(500, "An error occurred while getting profiles"))
   }
 })
 
@@ -46,7 +51,7 @@ profileRouter.get("/:id", async (req, res, next) => {
     }
   } catch (error) {
     console.log(error)
-    next(createError(500, "An error occurred while saving new author"))
+    next(createError(500, "An error occurred while saving new profile"))
   }
 })
 
@@ -63,11 +68,11 @@ profileRouter.put("/:id", async (req, res, next) => {
     if (modifiedProfile) {
       res.send(modifiedProfile)
     } else {
-      next(createError(404, `Author ${req.params.id} not found`))
+      next(createError(404, `Profile ${req.params.id} not found`))
     }
   } catch (error) {
     console.log(error)
-    next(createError(500, "An error occurred while modifying an author"))
+    next(createError(500, "An error occurred while modifying a profile"))
   }
 })
 
@@ -77,12 +82,42 @@ profileRouter.delete("/:id", async (req, res, next) => {
     if (profile) {
       res.send(profile)
     } else {
-      next(createError(404, `Author ${req.params.id} not found`))
+      next(createError(404, `Profile ${req.params.id} not found`))
     }
   } catch (error) {
     console.log(error)
-    next(createError(500, "An error occurred while deleting an author"))
+    next(createError(500, "An error occurred while deleting a profile"))
   }
 })
+
+const cloudinaryStorage = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: "Linkedin-clone",
+  },
+})
+
+profileRouter.post(
+  "/:id/imageupload",
+  multer({ storage: cloudinaryStorage }).single("avatar"),
+  async (req, res, next) => {
+    try {
+      const profile = await ProfileModel.findByIdAndUpdate(
+        req.params.id,
+        { image: req.file.path },
+        { runValidators: true, new: true }
+      )
+      if (profile) {
+        res.send(profile)
+      } else {
+        next(
+          createError(404, { message: `profile ${req.params.id} not found` })
+        )
+      }
+    } catch (error) {
+      next(createError(500, "An error occurred while uploading profile avatar"))
+    }
+  }
+)
 
 export default profileRouter
