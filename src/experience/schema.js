@@ -51,6 +51,10 @@ const ExperienceSchema = new Schema(
 			default:
 				'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fyt3.ggpht.com%2F-MlnvEdpKY2w%2FAAAAAAAAAAI%2FAAAAAAAAAAA%2FtOyTWDyUvgQ%2Fs900-c-k-no-mo-rj-c0xffffff%2Fphoto.jpg&f=1&nofb=1',
 		},
+		profile: {
+			type: Schema.Types.ObjectId,
+			ref: 'Profile',
+		},
 	},
 	{ timestamps: true }
 );
