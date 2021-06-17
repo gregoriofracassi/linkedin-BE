@@ -45,10 +45,24 @@ profileRouter.get("/", async (req, res, next) => {
 
 profileRouter.get("/:id", async (req, res, next) => {
   try {
-    console.log("our request", req.query)
     const profile = await ProfileModel.findById(req.params.id)
     if (profile) {
       res.send(profile)
+    } else {
+      next(createError(404, `Profile ${req.params.id} not found`))
+    }
+  } catch (error) {
+    console.log(error)
+    next(createError(500, "An error occurred while saving new profile"))
+  }
+})
+
+profileRouter.get("/:id/experiences", async (req, res, next) => {
+  try {
+    const profile = await ProfileModel.findById(req.params.id)
+    if (profile) {
+      const experiences = await ExperienceModel.find({ profile: req.params.id })
+      res.send(experiences)
     } else {
       next(createError(404, `Profile ${req.params.id} not found`))
     }
