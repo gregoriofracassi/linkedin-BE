@@ -1,11 +1,12 @@
-import mongoose from "mongoose"
-import createError from "http-errors"
+import mongoose from 'mongoose';
+import createError from 'http-errors';
 
-const { Schema, model } = mongoose
+const { Schema, model } = mongoose;
 // const model = mongoose.model
 // const Schema = mongoose.Schema
 
 const ProfileSchema = new Schema({
+
   name: {
     type: String,
     required: true,
@@ -37,16 +38,18 @@ const ProfileSchema = new Schema({
   },
 })
 
-ProfileSchema.post("validate", function (error, doc, next) {
-  if (error) {
-    const err = createError(400, error)
-    next(err)
-  } else {
-    next()
-  }
-})
 
-export default model("Profile", ProfileSchema)
+
+ProfileSchema.post('validate', function (error, doc, next) {
+	if (error) {
+		const err = createError(400, error);
+		next(err);
+	} else {
+		next();
+	}
+});
+
+export default model('Profile', ProfileSchema);
 
 //  {
 //       "_id": "5d84937322b7b54d848eb41b", //server generated
