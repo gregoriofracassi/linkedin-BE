@@ -30,7 +30,6 @@ postRouter.get("/", async (req, res, next) => {
       .skip(query.options.skip)
       .limit(query.options.limit)
       .sort(query.options.sort)
-      .populate("user")
 
     res.send({ links: query.links("/post", total), total, posts })
   } catch (error) {
