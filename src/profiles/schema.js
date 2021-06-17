@@ -28,6 +28,8 @@ const ProfileSchema = new Schema({
   },
   image: {
     type: String,
+    default: "https://iupac.org/wp-content/uploads/2018/05/default-avatar.png",
+    required: true,
   },
   username: {
     type: String,
