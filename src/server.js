@@ -14,6 +14,7 @@ import {
   catchAllErrorHandler,
 } from "./errorHandlers.js"
 import mongoose from "mongoose"
+import commentsRoutes from "../src/comments/index.js"
 
 const server = express()
 
@@ -45,6 +46,7 @@ server.use(cors(corsOptions))
 server.use("/profiles", profilesRoutes)
 server.use("/experiences", experienceRoutes)
 server.use("/posts", postsRoutes)
+server.use("/comments", commentsRoutes)
 // server.use("/experiences", experiencesRoutes)
 
 // ********ERROR MIDDLEWARES**********

@@ -126,7 +126,8 @@ profileRouter.post(
 profileRouter.get("/:id/pdfDownload", async (req, res, next) => {
   try {
     const profile = await ProfileModel.findById(req.params.id)
-    const experiences = await ExperienceModel.find({})
+    const experiences = await ExperienceModel.find({ profile: req.params.id })
+    console.log(experiences)
     const source = generatePDFStream(profile, experiences)
     const destination = res
     res.setHeader("Content-Disposition", "attachment; filename=export.pdf")
