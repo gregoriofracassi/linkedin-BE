@@ -6,34 +6,39 @@ const { Schema, model } = mongoose;
 // const Schema = mongoose.Schema
 
 const ProfileSchema = new Schema({
-	name: {
-		type: String,
-		required: true,
-	},
-	surname: {
-		type: String,
-		required: true,
-	},
-	email: {
-		type: String,
-		required: true,
-	},
-	bio: {
-		type: String,
-		required: true,
-	},
-	title: {
-		type: String,
-		required: true,
-	},
-	image: {
-		type: String,
-	},
-	username: {
-		type: String,
-		required: true,
-	},
-});
+
+  name: {
+    type: String,
+    required: true,
+  },
+  surname: {
+    type: String,
+    required: true,
+  },
+  email: {
+    type: String,
+    required: true,
+  },
+  bio: {
+    type: String,
+    required: true,
+  },
+  title: {
+    type: String,
+    required: true,
+  },
+  image: {
+    type: String,
+    default: "https://iupac.org/wp-content/uploads/2018/05/default-avatar.png",
+    required: true,
+  },
+  username: {
+    type: String,
+    required: true,
+  },
+})
+
+
 
 ProfileSchema.post('validate', function (error, doc, next) {
 	if (error) {
