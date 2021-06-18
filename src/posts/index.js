@@ -4,8 +4,8 @@ import createError from "http-errors"
 import multer from "multer"
 import { v2 as cloudinary } from "cloudinary"
 import { CloudinaryStorage } from "multer-storage-cloudinary"
-import ProfileModel from "./schema.js"
 import PostModel from "../posts/schema.js"
+import CommentModel from "../comments/schema.js"
 
 const postRouter = express.Router()
 
@@ -116,5 +116,20 @@ postRouter.post(
     }
   }
 )
+
+postRouter.get("/comments/:id", async (req, res, next) => {
+  try {
+    const post = await PostModel.findById(req.params.id)
+    if (post) {
+      const comments = await CommentModel.find({ post: req.params.id })
+      res.send(comments)
+    } else {
+      next(createError(404, `post ${req.params.id} not found`))
+    }
+  } catch (error) {
+    console.log(error)
+    next(createError(500, "An error occurred while saving new post"))
+  }
+})
 
 export default postRouter
