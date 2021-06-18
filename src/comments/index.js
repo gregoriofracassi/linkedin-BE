@@ -12,20 +12,10 @@ const commentRouter = express.Router()
 commentRouter.post("/", async (req, res, next) => {
   try {
     const newComment = new CommentModel(req.body)
-    const { post } = await newComment.save()
-    const postToUpdate = await PostModel.findByIdAndUpdate(
-      post,
-      {
-        $push: {
-          comments: newComment,
-        },
-      },
-      {
-        runValidators: true,
-        new: true,
-      }
-    )
-    res.status(201).send(postToUpdate)
+    const { _id } = await newComment.save()
+    const post = await PostModel.findById(req.body.post)
+    post.comments.push(newComment)
+    res.status(201).send(_id)
   } catch (error) {
     console.log(error)
     next(createError(500, "An error occurred while saving new comment"))
