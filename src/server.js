@@ -3,10 +3,8 @@ import listEndpoints from "express-list-endpoints"
 import cors from "cors"
 import profilesRoutes from "./profiles/index.js"
 import postsRoutes from "./posts/index.js"
-import { join } from "path"
 import experienceRoutes from "../src/experience/index.js"
-import filesRoutes from "./files/index.js"
-import { getCurrentFolderPath } from "./lib/fs-tools.js"
+
 import {
   badRequestErrorHandler,
   notFoundErrorHandler,

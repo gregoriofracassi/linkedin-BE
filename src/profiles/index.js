@@ -144,7 +144,10 @@ profileRouter.get("/:id/pdfDownload", async (req, res, next) => {
     console.log(experiences)
     const source = generatePDFStream(profile, experiences)
     const destination = res
-    res.setHeader("Content-Disposition", "attachment; filename=export.pdf")
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename=${req.params.id}.pdf`
+    )
     pipeline(source, destination, (err) => next(err))
   } catch (error) {
     next(error)
