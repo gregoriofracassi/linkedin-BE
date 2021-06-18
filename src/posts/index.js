@@ -117,7 +117,7 @@ postRouter.post(
   }
 )
 
-postRouter.get("/comments/:id", async (req, res, next) => {
+postRouter.get("/:id/comments", async (req, res, next) => {
   try {
     const post = await PostModel.findById(req.params.id)
     if (post) {
