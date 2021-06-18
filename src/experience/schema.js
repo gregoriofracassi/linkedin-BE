@@ -43,7 +43,7 @@ const ExperienceSchema = new Schema(
     },
     username: {
       type: String,
-      required: true,
+      default: "admin",
     },
     image: {
       type: String,

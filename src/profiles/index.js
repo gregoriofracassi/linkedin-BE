@@ -26,8 +26,8 @@ profileRouter.post("/", async (req, res, next) => {
 profileRouter.get("/", async (req, res, next) => {
   try {
     const query = q2m(req.query)
+    console.log(query.criteria)
     const total = await ProfileModel.countDocuments(query.criteria)
-
     const profiles = await ProfileModel.find(
       query.criteria,
       query.options.fields
