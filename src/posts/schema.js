@@ -12,6 +12,7 @@ const PostSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "Profile",
     required: true,
+    default: "60cc390714e1940015400b79",
   },
   username: {
     type: String,
