@@ -13,7 +13,8 @@ commentRouter.post("/", async (req, res, next) => {
   try {
     const newComment = new CommentModel(req.body)
     const { _id } = await newComment.save()
-
+    const post = await PostModel.findById(req.body.post)
+    post.comments.push(newComment)
     res.status(201).send(_id)
   } catch (error) {
     console.log(error)

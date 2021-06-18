@@ -22,6 +22,7 @@ const PostSchema = new Schema({
     deafult:
       "https://upload.wikimedia.org/wikipedia/commons/d/de/Windows_live_square.JPG",
   },
+  comments: [{ type: Schema.Types.ObjectId, ref: "Comment" }],
 })
 
 PostSchema.post("validate", function (error, doc, next) {
