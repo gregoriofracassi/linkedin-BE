@@ -6,7 +6,6 @@ import { CloudinaryStorage } from "multer-storage-cloudinary"
 import ProfileModel from "./schema.js"
 import PostModel from "../posts/schema.js"
 import CommentModel from "../comments/schema.js"
-import { truncate } from "fs-extra"
 
 const commentRouter = express.Router()
 
